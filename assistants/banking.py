@@ -1,10 +1,10 @@
 # import streamlit as st
 # from langchain_core.messages import HumanMessage
-from library.chatbots import chatbot
+from library.chatbots import generic
 import uuid
 
 
-bot = chatbot.Chatbot()
+bot = generic.Chatbot()
 bot.configureFeatures(
      generateNewChat = True,
      keepHistory = False
