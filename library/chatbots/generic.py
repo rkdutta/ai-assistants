@@ -40,13 +40,3 @@ class Chatbot:
 
     def run(self):
         user_input = st.chat_input("type here...")
-
-
-
-# Quick tests
-# bot = Chatbot()
-# bot.configureFeatures(
-#      generateNewChat = True,
-#      keepHistory = False
-# )
-# bot.run()

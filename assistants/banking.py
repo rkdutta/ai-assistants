@@ -4,7 +4,7 @@ from library.chatbots import generic
 import uuid
 
 
-bot = generic.Chatbot()
+bot = generic.Chatbot(botname="Banking Assistant")
 bot.configureFeatures(
      generateNewChat = True,
      keepHistory = False
