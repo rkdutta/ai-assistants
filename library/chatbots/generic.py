@@ -1,3 +1,5 @@
+from typing import Literal
+
 import streamlit as st
 import uuid
 
@@ -5,10 +7,15 @@ class Chatbot:
 
     def __init__(self, botname: str = ""):
         self.botname = botname or "My Chatbot Assistant"
+        self.keepChatHistoryFeature = False
+        self.generateNewChatFeature = False
         self.init()
-    
-    def keepHistory(self):
-        st.sidebar.header("History")
+
+    def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
+         return {"role": role, "content": msg}
+
+    def recordChatHistory(self, role, msg):
+        st.session_state["message_history"].append(self.generateMessage(role,msg))
 
     def generateNewChat(self):
         st.sidebar.button("New Chat")
@@ -32,14 +39,20 @@ class Chatbot:
         st.sidebar.title(self.botname)
         self.initSession()
 
-    def configureFeatures(self,keepHistory: bool = False, generateNewChat: bool = False):
-        if keepHistory:
-            self.keepHistory()
-        if generateNewChat:
-            self.generateNewChat()
+    def configureFeatures(self,keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False):
+
+        self.keepChatHistoryFeature = keepChatHistoryFeature
+        self.generateNewChatFeature = generateNewChatFeature
+
+        if self.keepChatHistoryFeature:
+            st.sidebar.header("History")
+        if self.generateNewChatFeature:
+            st.sidebar.button("New Chat")
 
     def run(self):
         user_input = st.chat_input("type here...")
         if user_input:
-            with st.chat_message("user"):
+            role = "user"
+            with st.chat_message(role):
                 st.text(user_input)
+                self.recordChatHistory(role,user_input)
