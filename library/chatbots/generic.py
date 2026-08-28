@@ -40,3 +40,6 @@ class Chatbot:
 
     def run(self):
         user_input = st.chat_input("type here...")
+        if user_input:
+            with st.chat_message("user"):
+                st.text(user_input)
