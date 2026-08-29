@@ -11,10 +11,15 @@ class Chatbot:
         self.generateNewChatFeature = False
         self.init()
 
-    def loadChatHistory(self):
+    def loadConversationHistory(self):
         for message in st.session_state["message_history"]:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
+
+    def log(self):
+        print("\n\n----------\n\n")
+        print("Number of messages in history  = ", len(st.session_state["message_history"]))
+        print("Number of chat threads in past = ", len(st.session_state["chat_threads"]))
 
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
         return {"role": role, "content": msg}
@@ -25,6 +30,10 @@ class Chatbot:
     def generateNewChat(self):
         st.sidebar.button("New Chat")
 
+    def addThread(self,thread_id):
+        if thread_id not in st.session_state.chat_threads:
+            st.session_state.chat_threads.append(thread_id)
+        
     def initSession(self):
 
         if "message_history" not in st.session_state:
@@ -43,6 +52,7 @@ class Chatbot:
             )
         st.sidebar.title(self.botname)
         self.initSession()
+        self.addThread(st.session_state.thread_id)
 
     def configureFeatures(self,keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False):
 
@@ -59,7 +69,7 @@ class Chatbot:
          return msg
          
     def run(self):
-        self.loadChatHistory()
+        self.loadConversationHistory()
         user_input = st.chat_input("type here...")
         if user_input:
             role = "user"
@@ -72,3 +82,5 @@ class Chatbot:
                 assistant_response = self.generateAssistantResponse(user_input)
                 st.markdown(assistant_response)
                 self.recordChatHistory(role,assistant_response)
+
+        self.log()
