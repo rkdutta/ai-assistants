@@ -54,6 +54,10 @@ class Chatbot:
         if self.generateNewChatFeature:
             st.sidebar.button("New Chat")
 
+    def generateAssistantResponse(self,msg: str):
+         msg = "ai responded"
+         return msg
+         
     def run(self):
         self.loadChatHistory()
         user_input = st.chat_input("type here...")
@@ -62,3 +66,9 @@ class Chatbot:
             with st.chat_message(role):
                 st.text(user_input)
                 self.recordChatHistory(role,user_input)
+
+            role = "assistant"
+            with st.chat_message(role):
+                assistant_response = self.generateAssistantResponse(user_input)
+                st.markdown(assistant_response)
+                self.recordChatHistory(role,assistant_response)
