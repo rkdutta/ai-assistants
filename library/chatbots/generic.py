@@ -11,6 +11,11 @@ class Chatbot:
         self.generateNewChatFeature = False
         self.init()
 
+    def loadChatHistory(self):
+            for message in st.session_state["message_history"]:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
          return {"role": role, "content": msg}
 
@@ -50,6 +55,7 @@ class Chatbot:
             st.sidebar.button("New Chat")
 
     def run(self):
+        self.loadChatHistory()
         user_input = st.chat_input("type here...")
         if user_input:
             role = "user"
