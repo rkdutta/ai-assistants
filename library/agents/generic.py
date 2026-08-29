@@ -31,6 +31,7 @@ class Assistant:
                 subagents=self.get_subagents(),
                 checkpointer=self.checkpointer,
                 system_prompt=self.get_system_prompt(),
+                skills=self.get_skills()
             )
 
     def get_system_prompt(self) -> str:
@@ -44,6 +45,10 @@ class Assistant:
     def get_subagents(self) -> list:
         """Override in subclasses to give this assistant its own subagents."""
         return []
+
+    def get_skills(self) -> list:
+        """Override in subclasses to give this assistant additional skills."""    
+        return []  
 
     def chat_node(self,state: ChatbotState) -> ChatbotState:
         messages = state.get("messages")
