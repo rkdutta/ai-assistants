@@ -12,12 +12,12 @@ class Chatbot:
         self.init()
 
     def loadChatHistory(self):
-            for message in st.session_state["message_history"]:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
+        for message in st.session_state["message_history"]:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
-         return {"role": role, "content": msg}
+        return {"role": role, "content": msg}
 
     def recordChatHistory(self, role, msg):
         st.session_state["message_history"].append(self.generateMessage(role,msg))
