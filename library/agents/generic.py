@@ -27,13 +27,23 @@ class Assistant:
 
         self.agent = create_deep_agent(
                 model=self.model,
-                # tools=all_tools,
-                # subagents=[billing_agent, customer_agent, supplier_agent],
+                tools=self.get_tools(),
+                subagents=self.get_subagents(),
                 checkpointer=self.checkpointer,
-                system_prompt=(
-                    "You are a Banking operations assistant."
-                ),
+                system_prompt=self.get_system_prompt(),
             )
+
+    def get_system_prompt(self) -> str:
+        """Override in subclasses to define the assistant's system prompt."""
+        raise NotImplementedError("Subclasses must implement get_system_prompt()")
+
+    def get_tools(self) -> list:
+        """Override in subclasses to give this assistant its own tools."""
+        return []
+
+    def get_subagents(self) -> list:
+        """Override in subclasses to give this assistant its own subagents."""
+        return []
 
     def chat_node(self,state: ChatbotState) -> ChatbotState:
         messages = state.get("messages")
@@ -48,12 +58,18 @@ class Assistant:
               return InMemorySaver()
 
 
+class BankingOpsAssistant(Assistant):
+
+    def get_system_prompt(self) -> str:
+        return "You are a Banking operations assistant."
+
+
 # testing code
 if __name__ == '__main__':
 
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(isLocal=True,inMemoryPersistance=True).getBot()
+    agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).getBot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
