@@ -22,6 +22,7 @@ class Chatbot:
         print("\n\n----------\n\n")
         print("Number of messages in history  = ", len(st.session_state["message_history"]))
         print("Number of chat threads in past = ", len(st.session_state["chat_threads"]))
+        print("Current thread = ", st.session_state.thread_id)
 
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
         return {"role": role, "content": msg}
@@ -85,4 +86,4 @@ class Chatbot:
                 st.markdown(assistant_response)
                 self.recordChatHistory(role,assistant_response)
 
-        # self.log()
+        self.log()
