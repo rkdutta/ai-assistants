@@ -13,9 +13,12 @@ class ChatbotState(TypedDict):
 
 class Assistant:
 
-    def __init__(self, isLocal: bool = True):
+    def __init__(self, isLocal: bool = True, inMemoryPersistance: bool = False):
+
+        self.isLocal = isLocal
+        self.inMemoryPersistance = inMemoryPersistance
         self.model = LLM(local = isLocal).get_llm()
-        self.checkpointer = InMemorySaver()
+        self.checkpointer = self.createPersistance()
 
         self.graph = StateGraph(ChatbotState)
         self.graph.add_node("chat_node", self.chat_node)
@@ -40,6 +43,10 @@ class Assistant:
     def getBot(self):
          return self.graph.compile(checkpointer=self.checkpointer)
 
+    def createPersistance(self):
+         if self.inMemoryPersistance:
+              return InMemorySaver()
+
 
 # testing code
 if __name__ == '__main__':
@@ -47,6 +54,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(isLocal=True).getBot()
+    agent = Assistant(isLocal=True,inMemoryPersistance=True).getBot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
