@@ -11,7 +11,7 @@ class Chatbot:
         self.generateNewChatFeature = False
         self.init()
 
-    def loadConversation(self, thread_id: str = None):
+    def loadConversation(self, thread_id: uuid.UUID = None):
         if thread_id is None:
             thread_id = st.session_state.thread_id
         for message in st.session_state["message_history"]:
@@ -33,7 +33,7 @@ class Chatbot:
     def generateNewChat(self):
         st.sidebar.button("New Chat")
 
-    def addThread(self,thread_id):
+    def addThread(self,thread_id: uuid.UUID):
         if thread_id not in st.session_state.chat_threads:
             st.session_state.chat_threads.append(thread_id)
         
@@ -68,8 +68,8 @@ class Chatbot:
         if self.keepChatHistoryFeature:
             st.sidebar.header("History")
 
-    def generateChatTitle(self,tid: str):
-        title = tid
+    def generateChatTitle(self,tid: uuid.UUID):
+        title = str(tid)
         return title
     
     def loadChatThreads(self):
