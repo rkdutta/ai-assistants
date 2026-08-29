@@ -67,13 +67,23 @@ class Chatbot:
 
         if self.keepChatHistoryFeature:
             st.sidebar.header("History")
-            
+
+    def generateChatTitle(self,tid: str):
+        title = tid
+        return title
+    
+    def loadChatThreads(self):
+        for tid in st.session_state.chat_threads:
+            label = self.generateChatTitle(tid)
+            st.sidebar.button(label, on_click=self.loadConversation(tid))
+
     def generateAssistantResponse(self,msg: str):
          msg = "ai responded"
          return msg
          
     def run(self):
         self.loadConversation()
+        self.loadChatThreads()
         user_input = st.chat_input("type here...")
         if user_input:
             role = "user"
