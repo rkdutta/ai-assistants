@@ -62,11 +62,12 @@ class Chatbot:
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
 
-        if self.keepChatHistoryFeature:
-            st.sidebar.header("History")
         if self.generateNewChatFeature:
             st.sidebar.button("New Chat")
 
+        if self.keepChatHistoryFeature:
+            st.sidebar.header("History")
+            
     def generateAssistantResponse(self,msg: str):
          msg = "ai responded"
          return msg

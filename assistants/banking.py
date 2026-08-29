@@ -6,7 +6,7 @@ import uuid
 
 bot = generic.Chatbot(botname="Banking Assistant")
 bot.configureFeatures(
-     keepChatHistoryFeature = False,
-     generateNewChatFeature = False
+     keepChatHistoryFeature = True,
+     generateNewChatFeature = True
 )
 bot.run()
