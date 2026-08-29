@@ -32,6 +32,8 @@ class Chatbot:
 
     def generateNewChat(self):
         st.sidebar.button("New Chat")
+        st.session_state.thread_id = uuid.uuid4()
+        self.addThread(st.session_state.thread_id)
 
     def addThread(self,thread_id: uuid.UUID):
         if thread_id not in st.session_state.chat_threads:
@@ -80,7 +82,11 @@ class Chatbot:
     def generateAssistantResponse(self,msg: str):
          msg = "ai responded"
          return msg
-         
+
+    def getThreadConfig(self):
+        config = {"configurable": {"thread_id": st.session_state.thread_id}}     
+        return config
+
     def run(self):
         self.loadConversation()
         self.loadChatThreads()
