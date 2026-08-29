@@ -18,7 +18,7 @@ class Assistant:
         self.isLocal = isLocal
         self.inMemoryPersistance = inMemoryPersistance
         self.model = LLM(local = isLocal).get_llm()
-        self.checkpointer = self.createPersistance()
+        self.checkpointer = self.create_persistance()
 
         self.graph = StateGraph(ChatbotState)
         self.graph.add_node("chat_node", self.chat_node)
@@ -55,10 +55,10 @@ class Assistant:
         response = self.agent.invoke({"messages": messages})
         return {"messages": [response["messages"][-1]]}
 
-    def getBot(self):
+    def get_bot(self):
          return self.graph.compile(checkpointer=self.checkpointer)
 
-    def createPersistance(self):
+    def create_persistance(self):
          if self.inMemoryPersistance:
               return InMemorySaver()
 
@@ -68,6 +68,10 @@ class BankingOpsAssistant(Assistant):
     def get_system_prompt(self) -> str:
         return "You are a Banking operations assistant."
 
+    def get_skills(self) -> list:
+        extra_skill = []
+        return super().get_skills() + extra_skill
+
 
 # testing code
 if __name__ == '__main__':
@@ -75,6 +79,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).getBot()
+    agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
