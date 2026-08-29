@@ -11,7 +11,9 @@ class Chatbot:
         self.generateNewChatFeature = False
         self.init()
 
-    def loadConversationHistory(self):
+    def loadConversation(self, thread_id: str = None):
+        if thread_id is None:
+            thread_id = st.session_state.thread_id
         for message in st.session_state["message_history"]:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
@@ -69,7 +71,7 @@ class Chatbot:
          return msg
          
     def run(self):
-        self.loadConversationHistory()
+        self.loadConversation()
         user_input = st.chat_input("type here...")
         if user_input:
             role = "user"
@@ -83,4 +85,4 @@ class Chatbot:
                 st.markdown(assistant_response)
                 self.recordChatHistory(role,assistant_response)
 
-        self.log()
+        # self.log()
