@@ -5,6 +5,6 @@ bot = generic.Chatbot(
     botname="Banking Assistant",
     keepChatHistoryFeature = True,
     generateNewChatFeature = True,
-    inMemoryPersistance=True
+    inMemoryPersistance=False
 )
 bot.run()
