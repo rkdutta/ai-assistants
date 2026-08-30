@@ -34,8 +34,8 @@ class Chatbot:
         st.session_state["message_history"].append(self.generateMessage(role,msg))
 
     def generateNewChat(self):
-        st.sidebar.button("New Chat")
         st.session_state.thread_id = uuid.uuid4()
+        st.session_state["message_history"] = []
         self.addThread(st.session_state.thread_id)
 
     def addThread(self,thread_id: uuid.UUID):
@@ -68,7 +68,7 @@ class Chatbot:
         self.generateNewChatFeature = generateNewChatFeature
 
         if self.generateNewChatFeature:
-            st.sidebar.button("New Chat")
+            st.sidebar.button("New Chat",on_click=self.generateNewChat())
 
         if self.keepChatHistoryFeature:
             st.sidebar.header("History")
