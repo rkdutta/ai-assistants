@@ -15,14 +15,11 @@ Requirements: Python 3.10+, `make`.
 # Seed data + start the API and the Streamlit chat UI together (banking_assistant by default)
 make start
 
-# Run a different assistant
+# Run a business assistant
 make start APP=business_assistant
 
-# Just (re)seed the database for an assistant — safe to re-run, drops and recreates tables
-make db APP=business_assistant
-
 # Run only the API (no chat UI)
-make api APP=banking_assistant
+make start APP=banking_assistant
 
 # Tear down the venv and generated dbs
 make clean
