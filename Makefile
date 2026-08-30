@@ -16,17 +16,21 @@ build:
 	$(PIP) install -e .
 
 db:
+	mkdir -p db/temp
 	mkdir -p db/$(APP)
 	$(PYTHON) assistants/$(APP)/resources/seed_data.py
 
 api: build db
 	$(PYTHON) assistants/$(APP)/api/main.py
 
+rag: build
+	$(PYTHON) assistants/$(APP)/resources/rag.py
+
 # Each recipe line normally runs in its own shell, so the trailing "\"
 # continuations below are needed to keep the backgrounded api process, the
 # trap, and streamlit all in one shell — otherwise the trap can't see the
 # api's PID and won't be able to clean it up.
-start: build db
+start: build db rag
 	$(PYTHON) assistants/$(APP)/api/main.py & \
 	API_PID=$$!; \
 	trap "kill $$API_PID 2>/dev/null" EXIT INT TERM; \
