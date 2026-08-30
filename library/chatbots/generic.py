@@ -20,10 +20,14 @@ class Chatbot:
 
         print("loading conv. for thread_id=",thread_id)
 
-        messages = st.session_state["live_chat"][thread_id]["message_history"]        
+        messages = st.session_state["live_chat"][thread_id]["message_history"]
         for message in messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
+
+    def switchThread(self, thread_id: uuid.UUID):
+        st.session_state.thread_id = thread_id
+        self.loadConversation()
 
     def log(self):
         print("\n\n----------\n\n")
@@ -99,7 +103,7 @@ class Chatbot:
     def loadChatThreads(self):
             for tid in st.session_state.chat_threads:
                 label = self.generateChatTitle(tid)
-                st.sidebar.button(label, on_click=self.loadConversation)
+                st.sidebar.button(label, on_click=self.switchThread, args=(tid,))
 
     def generateAssistantResponse(self,msg: str):
         config = {"configurable":{ "thread_id": st.session_state.thread_id }}
