@@ -29,10 +29,10 @@ class Chatbot:
         print("Current thread = ", st.session_state.thread_id)
 
         # print("Number of messages in history  = ", st.session_state["message_history"])
-        print("Number of chat threads in past = ", st.session_state["chat_threads"])
+        # print("Number of chat threads in past = ", st.session_state["chat_threads"])
 
         # self.printCurrentState()
-        print("st.session_state  = ", st.session_state)
+        # print("st.session_state  = ", st.session_state)
 
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
         return {"role": role, "content": msg}
@@ -42,8 +42,10 @@ class Chatbot:
 
     def generateNewChat(self):
         st.session_state.thread_id = uuid.uuid4()
+        st.session_state["live_chat"][st.session_state.thread_id] = {}
         st.session_state["live_chat"][st.session_state.thread_id]["message_history"] = []
         self.addThread(st.session_state.thread_id)
+        self.loadConversation(st.session_state.thread_id)
 
     def addThread(self,thread_id: uuid.UUID):
         if thread_id not in st.session_state.chat_threads:
@@ -58,10 +60,15 @@ class Chatbot:
                 st.session_state.thread_id = uuid.uuid4()
                 self.addThread(st.session_state.thread_id)
 
-        st.session_state["live_chat"] = {}
-        st.session_state["live_chat"][st.session_state.thread_id] = {}
-        if "message_history" not in st.session_state["live_chat"][st.session_state.thread_id]:
-            st.session_state["live_chat"][st.session_state.thread_id]["message_history"] = []
+        if "live_chat" not in st.session_state:
+            st.session_state["live_chat"] = {}
+            if st.session_state.thread_id not in st.session_state["live_chat"]:
+                st.session_state["live_chat"][st.session_state.thread_id] = {}
+                if "message_history" not in st.session_state["live_chat"][st.session_state.thread_id]:
+                    st.session_state["live_chat"][st.session_state.thread_id]["message_history"] = []
+
+        self.loadConversation()
+        self.loadChatThreads()
 
     def init(self):
         with st.chat_message("assistant"):
@@ -76,18 +83,16 @@ class Chatbot:
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
 
-        if self.generateNewChatFeature:
-            st.sidebar.button("New Chat",on_click=self.generateNewChat)
 
-        if self.keepChatHistoryFeature:
-            st.sidebar.header("History")
+        st.sidebar.button("New Chat",on_click=self.generateNewChat)
+
+        st.sidebar.header("History")
 
     def generateChatTitle(self,tid: uuid.UUID):
         title = str(tid)
         return title
     
     def loadChatThreads(self):
-        if self.keepChatHistoryFeature:
             for tid in st.session_state.chat_threads:
                 label = self.generateChatTitle(tid)
                 st.sidebar.button(label, on_click=self.loadConversation(tid))
@@ -106,8 +111,7 @@ class Chatbot:
         print(state)
         
     def run(self):
-        self.loadConversation()
-        self.loadChatThreads()
+
         user_input = st.chat_input("type here...")
         if user_input:
             role = "user"
