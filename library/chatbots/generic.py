@@ -7,6 +7,9 @@ from library.agents.specialised import BankingOpsAssistant
 
 class Chatbot:
 
+    def resetLiveChatMessageHistory(self):
+        st.session_state["live_chat"] = {}
+
     def __init__(self, botname: str = ""):
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = False
@@ -35,7 +38,7 @@ class Chatbot:
         print("Number of chat threads in past = ", len(st.session_state["chat_threads"]))
         print("Current thread = ", st.session_state.thread_id)
 
-        # print("Number of messages in history  = ", st.session_state["message_history"])
+        print("Number of messages in history  = ", st.session_state["live_chat"])
         # print("Number of chat threads in past = ", st.session_state["chat_threads"])
 
         # self.printCurrentState()
