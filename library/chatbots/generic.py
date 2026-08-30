@@ -67,9 +67,6 @@ class Chatbot:
                 if "message_history" not in st.session_state["live_chat"][st.session_state.thread_id]:
                     st.session_state["live_chat"][st.session_state.thread_id]["message_history"] = []
 
-        self.loadConversation()
-        self.loadChatThreads()
-
     def init(self):
         with st.chat_message("assistant"):
             st.markdown(
@@ -87,6 +84,8 @@ class Chatbot:
         st.sidebar.button("New Chat",on_click=self.generateNewChat)
 
         st.sidebar.header("History")
+        self.loadConversation()
+        self.loadChatThreads()
 
     def generateChatTitle(self,tid: uuid.UUID):
         title = str(tid)
