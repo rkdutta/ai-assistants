@@ -3,6 +3,8 @@ from typing import Literal
 import streamlit as st
 import uuid
 
+from library.agents.specialised import BankingOpsAssistant
+
 class Chatbot:
 
     def __init__(self, botname: str = ""):
@@ -80,8 +82,13 @@ class Chatbot:
             st.sidebar.button(label, on_click=self.loadConversation(tid))
 
     def generateAssistantResponse(self,msg: str):
-         msg = "ai responded"
-         return msg
+        msg = "ai responded"
+        thread_id = uuid.uuid4()
+        config = {"configurable":{ "thread_id": thread_id }}
+
+        agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).get_bot()
+        msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
+        return msg["messages"][-1].content
 
     def getThreadConfig(self):
         config = {"configurable": {"thread_id": st.session_state.thread_id}}     
