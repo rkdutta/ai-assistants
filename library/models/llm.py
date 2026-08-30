@@ -18,7 +18,7 @@ class llm(LLMProvider):
 
 
     def get_llm(self):
-        print("chosen model = ", self.model)
+        # print("chosen model = ", self.model)
         if self.local:
             return ChatOllama(model=self.model)
         return ChatOpenAI(model=self.model)
