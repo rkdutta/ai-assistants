@@ -11,6 +11,7 @@ class Chatbot:
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = False
         self.generateNewChatFeature = False
+        self.agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).get_bot()
         self.init()
 
     def loadConversation(self, thread_id: uuid.UUID = None):
@@ -82,12 +83,8 @@ class Chatbot:
             st.sidebar.button(label, on_click=self.loadConversation(tid))
 
     def generateAssistantResponse(self,msg: str):
-        msg = "ai responded"
-        thread_id = uuid.uuid4()
-        config = {"configurable":{ "thread_id": thread_id }}
-
-        agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).get_bot()
-        msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
+        config = {"configurable":{ "thread_id": st.session_state.thread_id }}
+        msg = self.agent.invoke({"messages": [{"role": "user", "content": msg}]},config=config)
         return msg["messages"][-1].content
 
     def getThreadConfig(self):
