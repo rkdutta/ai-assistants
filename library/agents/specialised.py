@@ -17,6 +17,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=False).get_bot()
+    agent = BankingOpsAssistant(botname="Banking Assistant",isLocal=True,inMemoryPersistance=False).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)

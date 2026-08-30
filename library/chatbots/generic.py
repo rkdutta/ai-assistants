@@ -16,7 +16,7 @@ class Chatbot:
 
     def getAgent(self):
         if "agent" not in st.session_state:
-            st.session_state["agent"] = BankingOpsAssistant(isLocal=True,inMemoryPersistance=self.inMemoryPersistance).get_bot()
+            st.session_state["agent"] = BankingOpsAssistant(botname=self.botname,isLocal=True,inMemoryPersistance=self.inMemoryPersistance).get_bot()
         return st.session_state["agent"]
 
     def loadConversation(self):

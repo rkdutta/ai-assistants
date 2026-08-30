@@ -15,8 +15,9 @@ class ChatbotState(TypedDict):
 
 class Assistant:
 
-    def __init__(self, isLocal: bool = True, inMemoryPersistance: bool = False):
+    def __init__(self, botname: str = "chatbot", isLocal: bool = True, inMemoryPersistance: bool = False):
 
+        self.botname = botname
         self.isLocal = isLocal
         self.inMemoryPersistance = inMemoryPersistance
         self.model = LLM(local = isLocal).get_llm()
@@ -63,7 +64,8 @@ class Assistant:
     def create_persistance(self):
         if self.inMemoryPersistance:
             return InMemorySaver()
-        conn = sqlite3.connect(database="db/chatbot.db",check_same_thread=False)
+        db_name = self.botname.lower().replace(" ", "_")
+        conn = sqlite3.connect(database=f"db/{db_name}.db",check_same_thread=False)
         return SqliteSaver(conn=conn)
 
 
@@ -73,6 +75,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(isLocal=True,inMemoryPersistance=False).get_bot()
+    agent = Assistant(botname="chatbot",isLocal=True,inMemoryPersistance=False).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
