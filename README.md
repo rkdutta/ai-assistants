@@ -1,4 +1,4 @@
-# banking-ops-assistant
+# ai-assistants (langGraph based)
 
 A small platform for building chat-based ops assistants. Each assistant pairs
 a LangGraph agent (via [deepagents](https://github.com/langchain-ai/deepagents))
