@@ -104,7 +104,7 @@ class Chatbot:
 
     def run(self):
         # self.loadConversation()
-        # self.loadChatThreads()
+        self.loadChatThreads()
         user_input = st.chat_input("type here...")
         # if user_input:
         #     role = "user"
