@@ -18,10 +18,11 @@ db:
 	mkdir -p db/$(APP)
 
 seed-db: build db
-	$(PYTHON) assistants/$(APP)/db/seed_data.py
+	$(PYTHON) assistants/$(APP)/resources/seed_data.py
 
 start: seed-db
 	$(STREAMLIT) run assistants/$(APP)/assistant.py
 
 clean:
 	rm -rf $(VENV) chatbot_agents_examples.egg-info
+	rm -rf db/

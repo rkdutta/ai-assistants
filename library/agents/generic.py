@@ -65,7 +65,7 @@ class Assistant:
         if self.inMemoryPersistance:
             return InMemorySaver()
         db_name = self.botname.lower().replace(" ", "_")
-        conn = sqlite3.connect(database=f"db/{db_name}.db",check_same_thread=False)
+        conn = sqlite3.connect(database=f"db/{db_name}/{db_name}.db",check_same_thread=False)
         return SqliteSaver(conn=conn)
 
 
