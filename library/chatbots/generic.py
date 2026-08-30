@@ -17,9 +17,15 @@ class Chatbot:
     def loadConversation(self, thread_id: uuid.UUID = None):
         if thread_id is None:
             thread_id = st.session_state.thread_id
-        for message in st.session_state["message_history"]:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+        # messages = self.agent.get_state(config={"configurable": {"thread_id": thread_id}})
+        # for message in st.session_state["message_history"]:
+        #     with st.chat_message(message["role"]):
+        #         st.markdown(message["content"])
+        # print(messages)
+        # for message in messages:
+        #             with st.chat_message(message["role"]):
+        #                 st.markdown(message["content"])
+
 
     def log(self):
         print("\n\n----------\n\n")
@@ -78,9 +84,10 @@ class Chatbot:
         return title
     
     def loadChatThreads(self):
-        for tid in st.session_state.chat_threads:
-            label = self.generateChatTitle(tid)
-            st.sidebar.button(label, on_click=self.loadConversation(tid))
+        if self.keepChatHistoryFeature:
+            for tid in st.session_state.chat_threads:
+                label = self.generateChatTitle(tid)
+                st.sidebar.button(label, on_click=self.loadConversation(tid))
 
     def generateAssistantResponse(self,msg: str):
         config = {"configurable":{ "thread_id": st.session_state.thread_id }}
