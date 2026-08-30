@@ -14,9 +14,12 @@ class Chatbot:
         self.agent = BankingOpsAssistant(isLocal=True,inMemoryPersistance=True).get_bot()
         self.init()
 
-    def loadConversation(self, thread_id: uuid.UUID = None):
-        if thread_id is None:
-            thread_id = st.session_state.thread_id
+    def loadConversation(self):
+
+        thread_id = st.session_state.thread_id
+
+        print("loading conv. for thread_id=",thread_id)
+
         messages = st.session_state["live_chat"][thread_id]["message_history"]        
         for message in messages:
             with st.chat_message(message["role"]):
@@ -45,7 +48,7 @@ class Chatbot:
         st.session_state["live_chat"][st.session_state.thread_id] = {}
         st.session_state["live_chat"][st.session_state.thread_id]["message_history"] = []
         self.addThread(st.session_state.thread_id)
-        self.loadConversation(st.session_state.thread_id)
+        self.loadConversation()
 
     def addThread(self,thread_id: uuid.UUID):
         if thread_id not in st.session_state.chat_threads:
@@ -96,7 +99,7 @@ class Chatbot:
     def loadChatThreads(self):
             for tid in st.session_state.chat_threads:
                 label = self.generateChatTitle(tid)
-                st.sidebar.button(label, on_click=self.loadConversation(tid))
+                st.sidebar.button(label, on_click=self.loadConversation)
 
     def generateAssistantResponse(self,msg: str):
         config = {"configurable":{ "thread_id": st.session_state.thread_id }}
