@@ -18,7 +18,7 @@ build:
 db:
 	mkdir -p db/$(APP)
 
-seed-db: 
+seed-db: db
 	$(PYTHON) assistants/$(APP)/resources/seed_data.py
 
 start: build db seed-db
