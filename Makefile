@@ -5,7 +5,8 @@ STREAMLIT := $(VENV)/bin/streamlit
 
 # Override on the command line, 
 # e.g. `make start APP=banking_assistant`
-APP ?= banking_assistant # default
+# default: banking_assistant
+APP ?= banking_assistant
 
 .PHONY: build start clean db seed-db
 
@@ -17,10 +18,10 @@ build:
 db:
 	mkdir -p db/$(APP)
 
-seed-db: build db
+seed-db: 
 	$(PYTHON) assistants/$(APP)/resources/seed_data.py
 
-start: seed-db
+start: build db seed-db
 	$(STREAMLIT) run assistants/$(APP)/assistant.py
 
 clean:
