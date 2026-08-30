@@ -12,6 +12,8 @@ langchain-chroma
 langchain-text-splitters
 langchain_ollama
 streamlit
+fastapi
+uvicorn
 langchain-mcp-adapters
 langgraph-checkpoint-sqlite
 pandas
