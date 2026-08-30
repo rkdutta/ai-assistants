@@ -80,13 +80,15 @@ class Chatbot:
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
 
+        if self.generateNewChatFeature:
+            st.sidebar.button("New Chat",on_click=self.generateNewChat)
 
-        st.sidebar.button("New Chat",on_click=self.generateNewChat)
+        if self.keepChatHistoryFeature:
+            st.sidebar.header("History")
+            self.loadChatThreads()
 
-        st.sidebar.header("History")
         self.loadConversation()
-        self.loadChatThreads()
-
+            
     def generateChatTitle(self,tid: uuid.UUID):
         title = str(tid)
         return title
