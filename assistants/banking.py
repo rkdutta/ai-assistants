@@ -1,11 +1,10 @@
 from library.chatbots import generic
 import uuid
 
-print("********************************************************")
-bot = generic.Chatbot(botname="Banking Assistant")
-bot.configureFeatures(
-     keepChatHistoryFeature = True,
-     generateNewChatFeature = True
+bot = generic.Chatbot(
+    botname="Banking Assistant",
+    keepChatHistoryFeature = True,
+    generateNewChatFeature = True,
+    inMemoryPersistance=True
 )
-print("********************************************************")
 bot.run()
