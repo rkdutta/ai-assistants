@@ -5,8 +5,10 @@ from langchain_core.tools import tool
 from langgraph.graph import StateGraph, START, END, add_messages
 from library.models.llm import llm as LLM
 from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver
 from typing import Annotated, TypedDict
 import uuid
+import sqlite3
 
 class ChatbotState(TypedDict):
         messages: Annotated[list[BaseMessage], add_messages]
@@ -59,8 +61,10 @@ class Assistant:
          return self.graph.compile(checkpointer=self.checkpointer)
 
     def create_persistance(self):
-         if self.inMemoryPersistance:
-              return InMemorySaver()
+        if self.inMemoryPersistance:
+            return InMemorySaver()
+        conn = sqlite3.connect(database="db/chatbot.db",check_same_thread=False)
+        return SqliteSaver(conn=conn)
 
 
 # testing code
@@ -69,6 +73,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(isLocal=True,inMemoryPersistance=True).get_bot()
+    agent = Assistant(isLocal=True,inMemoryPersistance=False).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
