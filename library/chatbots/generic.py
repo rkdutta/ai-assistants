@@ -17,6 +17,7 @@ class Chatbot:
     def loadConversation(self, thread_id: uuid.UUID = None):
         if thread_id is None:
             thread_id = st.session_state.thread_id
+        
         # messages = self.agent.get_state(config={"configurable": {"thread_id": thread_id}})
         # for message in st.session_state["message_history"]:
         #     with st.chat_message(message["role"]):
@@ -32,6 +33,9 @@ class Chatbot:
         print("Number of messages in history  = ", len(st.session_state["message_history"]))
         print("Number of chat threads in past = ", len(st.session_state["chat_threads"]))
         print("Current thread = ", st.session_state.thread_id)
+
+        # print("Number of messages in history  = ", st.session_state["message_history"])
+        print("Number of chat threads in past = ", st.session_state["chat_threads"])
 
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
         return {"role": role, "content": msg}
@@ -58,6 +62,7 @@ class Chatbot:
 
         if "thread_id" not in st.session_state:
                 st.session_state.thread_id = uuid.uuid4()
+                self.addThread(st.session_state.thread_id)
         
     def init(self):
         with st.chat_message("assistant"):
@@ -66,7 +71,6 @@ class Chatbot:
             )
         st.sidebar.title(self.botname)
         self.initSession()
-        self.addThread(st.session_state.thread_id)
 
     def configureFeatures(self,keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False):
 
@@ -74,7 +78,7 @@ class Chatbot:
         self.generateNewChatFeature = generateNewChatFeature
 
         if self.generateNewChatFeature:
-            st.sidebar.button("New Chat",on_click=self.generateNewChat())
+            st.sidebar.button("New Chat",on_click=self.generateNewChat)
 
         if self.keepChatHistoryFeature:
             st.sidebar.header("History")
@@ -99,19 +103,19 @@ class Chatbot:
         return config
 
     def run(self):
-        self.loadConversation()
-        self.loadChatThreads()
+        # self.loadConversation()
+        # self.loadChatThreads()
         user_input = st.chat_input("type here...")
-        if user_input:
-            role = "user"
-            with st.chat_message(role):
-                st.text(user_input)
-                self.recordChatHistory(role,user_input)
+        # if user_input:
+        #     role = "user"
+        #     with st.chat_message(role):
+        #         st.text(user_input)
+        #         self.recordChatHistory(role,user_input)
 
-            role = "assistant"
-            with st.chat_message(role):
-                assistant_response = self.generateAssistantResponse(user_input)
-                st.markdown(assistant_response)
-                self.recordChatHistory(role,assistant_response)
+        #     role = "assistant"
+        #     with st.chat_message(role):
+        #         assistant_response = self.generateAssistantResponse(user_input)
+        #         st.markdown(assistant_response)
+        #         self.recordChatHistory(role,assistant_response)
 
         self.log()
