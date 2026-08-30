@@ -3,7 +3,11 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 STREAMLIT := $(VENV)/bin/streamlit
 
-.PHONY: build start clean db
+# Override on the command line, 
+# e.g. `make start APP=banking_assistant`
+APP ?= banking_assistant # default
+
+.PHONY: build start clean db seed-db
 
 build:
 	python3 -m venv $(VENV)
@@ -11,10 +15,13 @@ build:
 	$(PIP) install -e .
 
 db:
-	mkdir -p db
+	mkdir -p db/$(APP)
 
-start: build db
-	$(STREAMLIT) run assistants/banking.py
+seed-db: build db
+	$(PYTHON) assistants/$(APP)/db/seed_data.py
+
+start: seed-db
+	$(STREAMLIT) run assistants/$(APP)/assistant.py
 
 clean:
 	rm -rf $(VENV) chatbot_agents_examples.egg-info
