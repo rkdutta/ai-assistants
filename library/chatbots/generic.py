@@ -37,6 +37,8 @@ class Chatbot:
         # print("Number of messages in history  = ", st.session_state["message_history"])
         print("Number of chat threads in past = ", st.session_state["chat_threads"])
 
+        self.printCurrentState()
+
     def generateMessage(self, role: Literal["user", "assistant"], msg: str) -> str:
         return {"role": role, "content": msg}
 
@@ -102,20 +104,24 @@ class Chatbot:
         config = {"configurable": {"thread_id": st.session_state.thread_id}}     
         return config
 
+    def printCurrentState(self):
+        state = self.agent.get_state(config=self.getThreadConfig())
+        print(state)
+        
     def run(self):
         # self.loadConversation()
         self.loadChatThreads()
         user_input = st.chat_input("type here...")
-        # if user_input:
-        #     role = "user"
-        #     with st.chat_message(role):
-        #         st.text(user_input)
-        #         self.recordChatHistory(role,user_input)
+        if user_input:
+            role = "user"
+            with st.chat_message(role):
+                st.text(user_input)
+                self.recordChatHistory(role,user_input)
 
-        #     role = "assistant"
-        #     with st.chat_message(role):
-        #         assistant_response = self.generateAssistantResponse(user_input)
-        #         st.markdown(assistant_response)
-        #         self.recordChatHistory(role,assistant_response)
+            role = "assistant"
+            with st.chat_message(role):
+                assistant_response = self.generateAssistantResponse(user_input)
+                st.markdown(assistant_response)
+                self.recordChatHistory(role,assistant_response)
 
         self.log()
