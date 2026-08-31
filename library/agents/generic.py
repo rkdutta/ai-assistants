@@ -100,8 +100,9 @@ class Assistant:
     def create_persistance(self):
         if self.inMemoryPersistance:
             return InMemorySaver()
-        db_name = self.botname.lower().replace(" ", "_")
-        conn = sqlite3.connect(database=f"db/{db_name}/{db_name}.db",check_same_thread=False)
+        WORKING_DIR = os.environ.get("WORKING_DIR")
+        API_KEY = os.environ.get("API_KEY")
+        conn = sqlite3.connect(database=f"{WORKING_DIR}/db/{API_KEY}.db", check_same_thread=False)
         return SqliteSaver(conn=conn)
 
 
