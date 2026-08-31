@@ -1,11 +1,11 @@
 import streamlit as st
 import uuid
-
+import json
 from library.agents.specialised import BankingOpsAssistant
 
 class Chatbot:
 
-    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: str = ""):
+    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: json = {}):
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature

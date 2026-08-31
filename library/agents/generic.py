@@ -1,5 +1,4 @@
 import asyncio
-import os
 from deepagents import create_deep_agent
 from langchain_core.messages import BaseMessage
 from langchain_core.tools import tool
@@ -9,15 +8,14 @@ from library.models.llm import llm as LLM
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.checkpoint.sqlite import SqliteSaver
 from typing import Annotated, TypedDict
-import uuid
-import sqlite3
+import uuid, sqlite3, json, os
 
 class ChatbotState(TypedDict):
         messages: Annotated[list[BaseMessage], add_messages]
 
 class Assistant:
 
-    def __init__(self, botname: str = "chatbot", isLocal: bool = True, inMemoryPersistance: bool = False, mcpConfig: str = ""):
+    def __init__(self, botname: str = "chatbot", isLocal: bool = True, inMemoryPersistance: bool = False, mcpConfig: json = {}):
 
         self.botname = botname
         self.isLocal = isLocal
