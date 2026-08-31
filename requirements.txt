@@ -19,3 +19,4 @@ langgraph-checkpoint-sqlite
 pandas
 agentevals
 pytest
+python-dotenv
