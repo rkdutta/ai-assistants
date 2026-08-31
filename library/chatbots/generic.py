@@ -70,6 +70,7 @@ class Chatbot:
             st.markdown(
                 "Hello! I am your assistant. How can I help you today?"
             )
+        print(">>>>>> title = ",self.botname)
         st.sidebar.title(self.botname)
         self.initSession()
 

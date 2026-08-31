@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 
 WORKING_DIR = os.environ.get("WORKING_DIR")
-load_dotenv(f"{WORKING_DIR}.env")
+load_dotenv(f"{WORKING_DIR}/.env")
 
 APP_KEY = os.environ.get("APP_KEY")
 APP_NAME = os.environ.get("APP_NAME")
