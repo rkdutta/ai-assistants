@@ -17,8 +17,15 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
+import os
+from dotenv import load_dotenv
 
-DB_PATH = Path("db/banking_assistant/banking_assistant.db")
+WORKING_DIR = os.environ.get("WORKING_DIR")
+load_dotenv(f"{WORKING_DIR}.env")
+
+APP_KEY = os.environ.get("APP_KEY")
+APP_NAME = os.environ.get("APP_NAME")
+DB_PATH = Path(f"{WORKING_DIR}/db/{APP_KEY}.db")
 
 
 def get_connection() -> sqlite3.Connection:

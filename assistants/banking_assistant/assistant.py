@@ -4,10 +4,12 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).parent / ".env")
+WORKING_DIR = os.environ.get("WORKING_DIR")
+load_dotenv(f"{WORKING_DIR}.env")
 
-APP_NAME = os.environ.get("APP_NAME", "Default Assistant")
-APP_KEY = os.environ.get("APP_KEY", "default")
+APP_KEY = os.environ.get("APP_KEY")
+APP_NAME = os.environ.get("APP_NAME")
+DB_PATH = Path(f"{WORKING_DIR}/db/{APP_KEY}.db")
 
 mcpConnection = f"assistants/{APP_KEY}/resources/mcp.json"
 with open(mcpConnection, "r", encoding="utf-8") as f:

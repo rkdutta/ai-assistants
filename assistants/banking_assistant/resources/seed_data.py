@@ -8,8 +8,16 @@ Re-running drops and recreates these tables, so it's safe to repeat.
 
 import sqlite3
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
-DB_PATH = Path("db/banking_assistant/banking_assistant.db")
+WORKING_DIR = os.environ.get("WORKING_DIR")
+load_dotenv(f"{WORKING_DIR}.env")
+
+APP_KEY = os.environ.get("APP_KEY")
+APP_NAME = os.environ.get("APP_NAME")
+DB_PATH = Path(f"{WORKING_DIR}/db/{APP_KEY}.db")
+
 
 USERS = [
     (1, "Ava", "Nguyen", "ava.nguyen@example.com", "+1-555-0301", "1987-03-14"),

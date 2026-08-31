@@ -7,10 +7,12 @@
 # from the repo root.
 
 ROOT := ../..
+ROOT_ABS := $(abspath $(ROOT))
 
 -include .env
 
-APP := $(APP_KEY)
+APP_KEY := $(APP_KEY)
+WORKING_DIR := $(patsubst $(ROOT_ABS)/%,%,$(CURDIR))
 
 %:
-	$(MAKE) -C $(ROOT) $@ APP=$(APP)
+	$(MAKE) -C $(ROOT) $@ APP_KEY=$(APP_KEY) WORKING_DIR=$(WORKING_DIR)
