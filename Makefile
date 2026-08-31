@@ -3,10 +3,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 STREAMLIT := $(VENV)/bin/streamlit
 
-# Override on the command line, 
-# e.g. `make start APP=banking_assistant`
-# default: banking_assistant
-APP ?= banking_assistant
+APP ?= default
 
 .PHONY: build start api clean db
 
