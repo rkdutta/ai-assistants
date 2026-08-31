@@ -11,15 +11,6 @@ class BankingOpsAssistant(Assistant):
         extra_skill = []
         return super().get_skills() + extra_skill
 
-    # def get_mcp_servers(self) -> dict:
-    #     return {
-    #         "banking_api": {
-    #             "command": sys.executable,
-    #             "args": ["assistants/banking_assistant/api/mcp_server.py"],
-    #             "transport": "stdio",
-    #         }
-    #     }
-
 
 # testing code
 if __name__ == '__main__':
