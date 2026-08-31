@@ -5,18 +5,19 @@ from library.agents.specialised import BankingOpsAssistant
 
 class Chatbot:
 
-    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False):
+    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: str = ""):
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
         self.inMemoryPersistance = inMemoryPersistance
         self.agent = self.getAgent()
+        self.mcpConfig = mcpConfig
         self.init()
         self.configureFeatures()
 
     def getAgent(self):
         if "agent" not in st.session_state:
-            st.session_state["agent"] = BankingOpsAssistant(botname=self.botname,isLocal=True,inMemoryPersistance=self.inMemoryPersistance).get_bot()
+            st.session_state["agent"] = BankingOpsAssistant(botname=self.botname,isLocal=True,inMemoryPersistance=self.inMemoryPersistance, mcpConfig=self.mcpConfig).get_bot()
         return st.session_state["agent"]
 
     def loadConversation(self):

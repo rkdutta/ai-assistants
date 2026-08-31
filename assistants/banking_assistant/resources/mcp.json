@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "grafana": {
+      "command": "uvx",
+      "args": ["mcp-grafana"],
+      "env": {
+        "GRAFANA_URL": "http://localhost:3000",
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": "<your service account token>"
+      }
+    },
+    "banking_api": {
+                "command": "sys.executable",
+                "args": ["assistants/banking_assistant/api/mcp_server.py"],
+                "transport": "stdio"
+    }
+  }
+}
