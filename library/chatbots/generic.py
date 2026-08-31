@@ -10,8 +10,8 @@ class Chatbot:
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
         self.inMemoryPersistance = inMemoryPersistance
-        self.agent = self.getAgent()
         self.mcpConfig = mcpConfig
+        self.agent = self.getAgent()
         self.init()
         self.configureFeatures()
 

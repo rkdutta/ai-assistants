@@ -54,7 +54,12 @@ class Assistant:
         should pull tools from. Keys are server names; values follow the
         langchain-mcp-adapters connection config (command/args/transport for
         stdio, or url/transport for streamable-http)."""
-        return self.mcpConfig
+        if not self.mcpConfig:
+            return {}
+        # mcp.json follows the common "mcpServers" wrapper (Claude
+        # Desktop/VS Code style); MultiServerMCPClient wants the flat
+        # {server_name: config} dict underneath it.
+        return self.mcpConfig.get("mcpServers", self.mcpConfig)
 
     def get_mcp_tools(self) -> list:
         servers = self.get_mcp_servers()
