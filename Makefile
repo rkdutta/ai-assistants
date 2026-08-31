@@ -8,11 +8,13 @@ APP_KEY ?= default
 # working directory is initialized from assistant Makefile
 WORKING_DIR ?= ./
 
-.PHONY: build start api clean db
+.PHONY: build start api clean db rag venv
 
-build:
+venv:
 	python3 -m venv $(VENV)
 	$(PIP) install -r requirements.txt
+
+build:
 	$(PIP) install -e .
 
 db:
@@ -29,7 +31,7 @@ rag: db
 # continuations below are needed to keep the backgrounded api process, the
 # trap, and streamlit all in one shell — otherwise the trap can't see the
 # api's PID and won't be able to clean it up.
-start: build db rag
+start: db rag
 	WORKING_DIR=$(WORKING_DIR) $(PYTHON) $(WORKING_DIR)/api/main.py & \
 	API_PID=$$!; \
 	trap "kill $$API_PID 2>/dev/null" EXIT INT TERM; \
