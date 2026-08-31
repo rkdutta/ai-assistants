@@ -13,12 +13,18 @@ Run with: .venv/bin/python assistants/business_assistant/api/main.py
 
 import sqlite3
 from pathlib import Path
-
+import os
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
-DB_PATH = Path("db/business_assistant/business_assistant.db")
+WORKING_DIR = os.environ.get("WORKING_DIR")
+load_dotenv(f"{WORKING_DIR}.env")
+
+APP_KEY = os.environ.get("APP_KEY")
+APP_NAME = os.environ.get("APP_NAME")
+DB_PATH = Path(f"{WORKING_DIR}/db/{APP_KEY}.db")
 
 INVOICE_STATUSES = {"paid", "overdue", "pending"}
 PURCHASE_ORDER_STATUSES = {"pending", "in_transit", "delivered"}
