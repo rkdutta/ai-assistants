@@ -24,6 +24,7 @@ class Assistant:
         self.checkpointer = self.create_persistance()
 
         self.mcpConfig = mcpConfig
+        self.mcp_status = {}
 
         self.graph = StateGraph(ChatbotState)
         self.graph.add_node("chat_node", self.chat_node)
@@ -62,18 +63,29 @@ class Assistant:
     def get_mcp_tools(self) -> list:
         servers = self.get_mcp_servers()
         print(">>>> MCP servers: ",servers)
+        self.mcp_status = {}
         if not servers:
             return []
-        client = MultiServerMCPClient(servers)
-        print(">>>> MCP client: ",client)
-        tools = asyncio.run(client.get_tools())
+        tools = []
+        for name, cfg in servers.items():
+            try:
+                client = MultiServerMCPClient({name: cfg})
+                server_tools = asyncio.run(client.get_tools())
+                for t in server_tools:
+                    # MCP tools only ship a coroutine; the deep agent's tool node
+                    # invokes tools synchronously, so give each one a sync entrypoint
+                    # that runs its coroutine to completion.
+                    t.func = self._make_sync_tool_func(t.coroutine)
+                self.mcp_status[name] = {"connected": True, "tool_count": len(server_tools), "error": None}
+                tools.extend(server_tools)
+            except Exception as e:
+                self.mcp_status[name] = {"connected": False, "tool_count": 0, "error": str(e)}
         print(">>>> MCP tools: ",tools)
-        for t in tools:
-            # MCP tools only ship a coroutine; the deep agent's tool node
-            # invokes tools synchronously, so give each one a sync entrypoint
-            # that runs its coroutine to completion.
-            t.func = self._make_sync_tool_func(t.coroutine)
         return tools
+
+    def get_mcp_status(self) -> dict:
+        """Per-server connection status, populated by the last get_mcp_tools() call."""
+        return self.mcp_status
 
     @staticmethod
     def _make_sync_tool_func(coroutine):

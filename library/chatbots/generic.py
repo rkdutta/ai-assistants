@@ -1,20 +1,19 @@
 import streamlit as st
 import uuid
-import json
 # from library.agents.specialised import BankingOpsAssistant
 from library.agents.generic import Assistant
 
 class Chatbot:
 
-    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: json = {}, agents: Assistant = None):
+    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, agents: Assistant = None):
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
         self.inMemoryPersistance = inMemoryPersistance
-        self.mcpConfig = mcpConfig
+        self.assistant = agents
         # self.agent = self.getAgent()
         if "agent" not in st.session_state:
-            st.session_state["agent"] = agents
+            st.session_state["agent"] = agents.get_bot()
         self.agent = st.session_state["agent"]
         self.init()
         self.configureFeatures()
@@ -87,6 +86,22 @@ class Chatbot:
             self.loadChatThreads()
 
         self.loadConversation()
+        self.showMcpStatus()
+
+    def showMcpStatus(self):
+        status = self.assistant.get_mcp_status()
+        if not status:
+            return
+
+        st.sidebar.header("MCP Connections")
+
+        for name, info in status.items():
+            if info["connected"]:
+                st.sidebar.markdown(f"🟢 **{name}**")
+            else:
+                st.sidebar.markdown(f"🔴 **{name}** — disconnected")
+                with st.sidebar.expander("Error"):
+                    st.text(info["error"])
             
     def generateChatTitle(self,tid: uuid.UUID):
         title = str(tid)

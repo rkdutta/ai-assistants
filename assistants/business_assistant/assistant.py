@@ -20,12 +20,11 @@ bot = generic.Chatbot(
     keepChatHistoryFeature = True,
     generateNewChatFeature = True,
     inMemoryPersistance=False,
-    mcpConfig = mcpConfig,
     agents =Router(
             botname=f"{APP_NAME}",
             isLocal=True,
             inMemoryPersistance=False,
             mcpConfig=mcpConfig
-        ).get_bot()
+        )
 )
 bot.run()
