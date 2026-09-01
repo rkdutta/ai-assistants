@@ -12,14 +12,13 @@ directly.
 Requirements: Python 3.10+, `make`.
 
 ```bash
-# Seed data + start the API and the Streamlit chat UI together (banking_assistant by default)
+# Run a business assistant
+cd assistants/business_assistant
 make start
 
-# Run a business assistant
-make start APP=business_assistant
-
-# Run only the API (no chat UI)
-make start APP=banking_assistant
+# Run a banking assistant
+cd assistants/banking_assistant
+make start
 
 # Tear down the venv and generated dbs
 make clean
