@@ -8,7 +8,7 @@ APP_KEY ?= default
 # working directory is initialized from assistant Makefile
 WORKING_DIR ?= ./
 
-.PHONY: build start api clean db rag venv help
+.PHONY: build start api clean db rag venv help bootstrap
 
 .DEFAULT_GOAL := help
 
@@ -36,11 +36,13 @@ rag: db ## Build the RAG index (implies db)
 # continuations below are needed to keep the backgrounded api process, the
 # trap, and streamlit all in one shell — otherwise the trap can't see the
 # api's PID and won't be able to clean it up.
-start: db rag ## Run the API in the background and Streamlit in the foreground
+start: build db rag ## Run the API in the background and Streamlit in the foreground
 	WORKING_DIR=$(WORKING_DIR) $(PYTHON) $(WORKING_DIR)/api/main.py & \
 	API_PID=$$!; \
 	trap "kill $$API_PID 2>/dev/null" EXIT INT TERM; \
 	$(STREAMLIT) run $(WORKING_DIR)/assistant.py
+
+bootstrap: venv start ## Bootstrap
 
 clean: ## Remove the virtualenv, build artifacts, and seeded db
 	rm -rf $(VENV) chatbot_agents_examples.egg-info
