@@ -1,6 +1,5 @@
+import json,os
 from library.chatbots import generic
-import json
-import os
 from pathlib import Path
 from dotenv import load_dotenv
 from resources.agents.specialised import Router
