@@ -9,7 +9,18 @@ directly.
 
 ## Quickstart
 
-Requirements: Python 3.10+, `make`.
+Requirements: Python 3.10+, `make`, [Ollama](https://ollama.com) (for local models).
+
+Install Ollama on macOS, then pull the models this project uses:
+
+```bash
+brew install ollama
+```
+
+```bash
+ollama pull qwen3-embedding:latest
+ollama pull north-mini-code-1.0:latest
+```
 
 ```bash
 # Run a business assistant
