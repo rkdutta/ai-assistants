@@ -29,7 +29,7 @@ make clean
 stopping Streamlit (Ctrl+C) shuts the API down too. Once it's up:
 
 - Chat UI: **http://localhost:8501**
-- API + Swagger docs: **http://localhost:8000/docs**
+- API + Swagger docs: **http://localhost:8001/docs** (banking_assistant) or **http://localhost:8002/docs** (business_assistant)
 
 ## Architecture
 
@@ -84,8 +84,10 @@ tables — lives in one SQLite file at `db/<name>/<name>.db`.
 ## API reference
 
 Each assistant's FastAPI service mimics that domain's existing backend
-system. It runs on **port 8000** and only touches its own business tables —
-never the LangGraph checkpoint tables sharing the same db file.
+system and only touches its own business tables — never the LangGraph
+checkpoint tables sharing the same db file. Each assistant reads its port
+from `PORT` in its own `.env`: **banking_assistant** runs on **8001**,
+**business_assistant** on **8002**, so both APIs can run at the same time.
 
 ### Banking Assistant API
 
@@ -119,14 +121,12 @@ never the LangGraph checkpoint tables sharing the same db file.
 
 ### Interactive docs (Swagger / ReDoc)
 
-Every assistant's API gets these for free from FastAPI — no extra setup:
+Every assistant's API gets these for free from FastAPI — no extra setup
+(substitute the assistant's port, 8001 for banking, 8002 for business):
 
-- **`http://localhost:8000/docs`** — Swagger UI, try requests directly in the browser
-- **`http://localhost:8000/redoc`** — ReDoc, a read-only reference view
-- **`http://localhost:8000/openapi.json`** — the raw OpenAPI 3 schema
-
-Since the assistants share port 8000, only one assistant's API can run at a
-time today.
+- **`http://localhost:<port>/docs`** — Swagger UI, try requests directly in the browser
+- **`http://localhost:<port>/redoc`** — ReDoc, a read-only reference view
+- **`http://localhost:<port>/openapi.json`** — the raw OpenAPI 3 schema
 
 ## Project structure
 

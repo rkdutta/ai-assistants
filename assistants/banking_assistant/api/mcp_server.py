@@ -11,9 +11,15 @@ Launched automatically over stdio by the assistant's MCP client config
 import os
 
 import httpx
+from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
-BANKING_API_URL = os.environ.get("BANKING_API_URL", "http://localhost:8000")
+WORKING_DIR = os.environ.get("WORKING_DIR")
+load_dotenv(f"{WORKING_DIR}/.env")
+
+BANKING_API_URL = os.environ.get(
+    "BANKING_API_URL", f"http://localhost:{os.environ.get('PORT', 8001)}"
+)
 
 mcp = FastMCP("banking-core-api")
 
