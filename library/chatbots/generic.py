@@ -82,8 +82,8 @@ class Chatbot:
             st.sidebar.button("New Chat",on_click=self.generateNewChat)
 
         if self.keepChatHistoryFeature:
-            st.sidebar.header("History")
-            self.loadChatThreads()
+            with st.sidebar.expander("History", expanded=False):
+                self.loadChatThreads()
 
         self.loadConversation()
         self.showMcpStatus()
@@ -93,15 +93,13 @@ class Chatbot:
         if not status:
             return
 
-        st.sidebar.header("MCP Connections")
-
-        for name, info in status.items():
-            if info["connected"]:
-                st.sidebar.markdown(f"🟢 **{name}**")
-            else:
-                st.sidebar.markdown(f"🔴 **{name}** — disconnected")
-                with st.sidebar.expander("Error"):
-                    st.text(info["error"])
+        with st.sidebar.expander("MCP Connections", expanded=False):
+            for name, info in status.items():
+                if info["connected"]:
+                    st.markdown(f"🟢 **{name}**")
+                else:
+                    st.markdown(f"🔴 **{name}** — disconnected")
+                    st.caption(info["error"])
             
     def generateChatTitle(self,tid: uuid.UUID):
         title = str(tid)
@@ -110,7 +108,7 @@ class Chatbot:
     def loadChatThreads(self):
             for tid in st.session_state.chat_threads:
                 label = self.generateChatTitle(tid)
-                st.sidebar.button(label, on_click=self.switchThread, args=(tid,))
+                st.button(label, on_click=self.switchThread, args=(tid,))
 
     def generateAssistantResponse(self,msg: str):
         config = {"configurable":{ "thread_id": st.session_state.thread_id }}
