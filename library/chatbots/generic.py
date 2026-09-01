@@ -1,24 +1,28 @@
 import streamlit as st
 import uuid
 import json
-from library.agents.specialised import BankingOpsAssistant
+# from library.agents.specialised import BankingOpsAssistant
+from library.agents.generic import Assistant
 
 class Chatbot:
 
-    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: json = {}):
+    def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = False, generateNewChatFeature: bool = False, mcpConfig: json = {}, agents: Assistant = None):
         self.botname = botname or "My Chatbot Assistant"
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
         self.inMemoryPersistance = inMemoryPersistance
         self.mcpConfig = mcpConfig
-        self.agent = self.getAgent()
+        # self.agent = self.getAgent()
+        if "agent" not in st.session_state:
+            st.session_state["agent"] = agents
+        self.agent = st.session_state["agent"]
         self.init()
         self.configureFeatures()
 
-    def getAgent(self):
-        if "agent" not in st.session_state:
-            st.session_state["agent"] = BankingOpsAssistant(botname=self.botname,isLocal=True,inMemoryPersistance=self.inMemoryPersistance, mcpConfig=self.mcpConfig).get_bot()
-        return st.session_state["agent"]
+    # def getAgent(self):
+    #     if "agent" not in st.session_state:
+    #         st.session_state["agent"] = BankingOpsAssistant(botname=self.botname,isLocal=True,inMemoryPersistance=self.inMemoryPersistance, mcpConfig=self.mcpConfig).get_bot()
+    #     return st.session_state["agent"]
 
     def loadConversation(self):
 
