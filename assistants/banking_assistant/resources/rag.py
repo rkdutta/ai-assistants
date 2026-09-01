@@ -13,3 +13,8 @@ DB_PATH = Path(f"{WORKING_DIR}/db")
 rag = Rag(
     CHROMA_DIR=f"{DB_PATH}"
 )
+
+if __name__ == "__main__":
+    DOCS_DIR = Path(f"{WORKING_DIR}/resources/docs")
+    count = rag.ingest_directory(DOCS_DIR)
+    print(f"Ingested {count} chunks from {DOCS_DIR} into {DB_PATH}")

@@ -10,6 +10,7 @@ faiss-cpu
 langchain-faiss
 langchain-chroma
 langchain-text-splitters
+pypdf
 langchain_ollama
 streamlit
 fastapi
