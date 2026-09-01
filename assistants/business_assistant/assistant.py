@@ -3,7 +3,7 @@ import json
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from agents.specialised import Router
+from resources.agents.specialised import Router
 
 WORKING_DIR = os.environ.get("WORKING_DIR")
 load_dotenv(f"{WORKING_DIR}/.env")
