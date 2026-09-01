@@ -19,7 +19,6 @@ bot = generic.Chatbot(
     botname=f"{APP_NAME}",
     keepChatHistoryFeature = True,
     generateNewChatFeature = True,
-    inMemoryPersistance=False,
     agents =Router(
             botname=f"{APP_NAME}",
             isLocal=True,
