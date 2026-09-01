@@ -18,8 +18,6 @@ with open(mcpConnection, "r", encoding="utf-8") as f:
 bot = generic.Chatbot(
     botname=f"{APP_NAME}",
     agents =Router(
-            botname=f"{APP_NAME}",
-            # isLocal=False, # enable this line when using a remote model
             mcpConfig=mcpConfig
         )
 )

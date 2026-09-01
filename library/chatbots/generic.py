@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import uuid
 # from library.agents.specialised import BankingOpsAssistant
@@ -6,7 +7,7 @@ from library.agents.generic import Assistant
 class Chatbot:
 
     def __init__(self, botname: str = "", inMemoryPersistance: bool = False, keepChatHistoryFeature: bool = True, generateNewChatFeature: bool = True, agents: Assistant = None):
-        self.botname = botname or "My Chatbot Assistant"
+        self.botname = os.getenv("APP", botname) or "My Chatbot Assistant"
         self.keepChatHistoryFeature = keepChatHistoryFeature
         self.generateNewChatFeature = generateNewChatFeature
         self.inMemoryPersistance = inMemoryPersistance
