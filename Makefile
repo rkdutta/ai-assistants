@@ -15,12 +15,24 @@ WORKING_DIR ?= ./
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
+# venv and build both write into the shared $(VENV), so when two assistants'
+# `make start` run at once they'd otherwise race two pip installs against the
+# same site-packages (e.g. one deleting/rewriting the editable-install .pth
+# file mid-write for the other). This mkdir-based lock is atomic and portable
+# (no flock dependency on macOS), so the second invocation just waits.
+VENV_LOCK := $(VENV)/.lock
+define with_venv_lock
+	@mkdir -p $(VENV); \
+	while ! mkdir $(VENV_LOCK) 2>/dev/null; do sleep 0.5; done; \
+	trap 'rmdir $(VENV_LOCK)' EXIT INT TERM; \
+	$(1)
+endef
+
 venv: ## Create the virtualenv and install requirements
-	python3 -m venv $(VENV)
-	$(PIP) install -r requirements.txt
+	$(call with_venv_lock,python3 -m venv $(VENV) && $(PIP) install -r requirements.txt)
 
 build: ## Install this package into the virtualenv
-	$(PIP) install -e .
+	$(call with_venv_lock,$(PIP) install -e .)
 
 db: ## Seed the database
 	mkdir -p $(WORKING_DIR)/db
