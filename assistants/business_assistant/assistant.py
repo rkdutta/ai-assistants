@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from agents.specialised import Router
 
 WORKING_DIR = os.environ.get("WORKING_DIR")
 load_dotenv(f"{WORKING_DIR}/.env")
@@ -20,6 +21,12 @@ bot = generic.Chatbot(
     keepChatHistoryFeature = True,
     generateNewChatFeature = True,
     inMemoryPersistance=False,
-    mcpConfig = mcpConfig
+    mcpConfig = mcpConfig,
+    agents =Router(
+            botname=f"{APP_NAME}",
+            isLocal=True,
+            inMemoryPersistance=False,
+            mcpConfig=mcpConfig
+        ).get_bot()
 )
 bot.run()
