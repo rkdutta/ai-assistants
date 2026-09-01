@@ -17,12 +17,9 @@ with open(mcpConnection, "r", encoding="utf-8") as f:
 
 bot = generic.Chatbot(
     botname=f"{APP_NAME}",
-    keepChatHistoryFeature = True,
-    generateNewChatFeature = True,
     agents =Router(
             botname=f"{APP_NAME}",
-            isLocal=True,
-            inMemoryPersistance=False,
+            # isLocal=False, # enable this line when using a remote model
             mcpConfig=mcpConfig
         )
 )
