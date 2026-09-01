@@ -15,9 +15,8 @@ class ChatbotState(TypedDict):
 
 class Assistant:
 
-    def __init__(self, botname: str = "chatbot", isLocal: bool = True, inMemoryPersistance: bool = False, mcpConfig: json = {}):
+    def __init__(self, isLocal: bool = True, inMemoryPersistance: bool = False, mcpConfig: json = {}):
 
-        self.botname = botname
         self.isLocal = isLocal
         self.inMemoryPersistance = inMemoryPersistance
         self.model = LLM(local = isLocal).get_llm()
@@ -124,6 +123,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(botname="chatbot",isLocal=True,inMemoryPersistance=False).get_bot()
+    agent = Assistant(isLocal=True,inMemoryPersistance=False).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
