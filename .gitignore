@@ -24,3 +24,4 @@ data/tool_calls.log
 *.egg-info/
 tmp/
 db/
+architecture_evaluator/

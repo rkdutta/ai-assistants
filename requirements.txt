@@ -25,3 +25,4 @@ langchain-aws
 langchain-anthropic
 langchain-google-genai
 botocore[crt]
+pyyaml

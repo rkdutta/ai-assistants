@@ -1,0 +1,28 @@
+name: Business Assistant
+key: business_assistant
+port: 8002
+
+# Optional; defaults to LLM_PROVIDER / LLM_MODEL from the environment.
+model:
+  provider: ollama   # ollama | openai | bedrock | anthropic | gemini
+  # name: claude-sonnet-5-5
+
+system_prompt: You are a business operations assistant.
+
+# Remove a section below to turn that capability off for this assistant.
+mcp:
+  business_api:
+    command: .venv/bin/python
+    args: ["${WORKING_DIR}/api/mcp_server.py"]
+    transport: stdio
+    env:
+      PORT: "${PORT}"
+
+rag:
+  docs: resources/docs
+
+db:
+  seed: resources/seed_data.py
+
+api:
+  main: api/main.py

@@ -15,10 +15,10 @@ class ChatbotState(TypedDict):
 
 class Assistant:
 
-    def __init__(self, inMemoryPersistance: bool = False, mcpConfig: json = {}):
+    def __init__(self, inMemoryPersistance: bool = False, mcpConfig: json = {}, llm_provider: str | None = None, model_name: str | None = None):
 
         self.inMemoryPersistance = inMemoryPersistance
-        self.model = LLM().get_llm()
+        self.model = LLM(model=model_name, llm_provider=llm_provider).get_llm()
         self.checkpointer = self.create_persistance()
 
         self.mcpConfig = mcpConfig
