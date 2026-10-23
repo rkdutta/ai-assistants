@@ -2,7 +2,7 @@
   "mcpServers": {
     "business_api": {
         "command": ".venv/bin/python",
-        "args": ["assistants/business_assistant/api/mcp_server.py"],
+        "args": ["assistants/${APP_KEY}/api/mcp_server.py"],
         "transport": "stdio"
     }
   }

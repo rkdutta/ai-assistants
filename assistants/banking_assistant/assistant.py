@@ -13,7 +13,8 @@ DB_PATH = Path(f"{WORKING_DIR}/db/{APP_KEY}.db")
 
 mcpConnection = f"{WORKING_DIR}/resources/mcp.json"
 with open(mcpConnection, "r", encoding="utf-8") as f:
-    mcpConfig = json.load(f)
+    # expand ${APP_KEY} etc. in the raw text; JSON itself has no substitution
+    mcpConfig = json.loads(os.path.expandvars(f.read()))
 
 bot = generic.Chatbot(
     botname=f"{APP_NAME}",
