@@ -15,11 +15,10 @@ class ChatbotState(TypedDict):
 
 class Assistant:
 
-    def __init__(self, isLocal: bool = True, inMemoryPersistance: bool = False, mcpConfig: json = {}):
+    def __init__(self, inMemoryPersistance: bool = False, mcpConfig: json = {}):
 
-        self.isLocal = isLocal
         self.inMemoryPersistance = inMemoryPersistance
-        self.model = LLM(local = isLocal).get_llm()
+        self.model = LLM().get_llm()
         self.checkpointer = self.create_persistance()
 
         self.mcpConfig = mcpConfig
@@ -123,6 +122,6 @@ if __name__ == '__main__':
     thread_id = uuid.uuid4()
     config = {"configurable":{ "thread_id": thread_id }}
 
-    agent = Assistant(isLocal=True,inMemoryPersistance=False).get_bot()
+    agent = Assistant(inMemoryPersistance=False).get_bot()
     msg = agent.invoke({"messages": [{"role": "user", "content": "Hi"}]},config=config)
     print(msg["messages"][-1].content)
